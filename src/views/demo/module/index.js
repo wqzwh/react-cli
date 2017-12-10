@@ -14,10 +14,9 @@ class Module extends Component {
 
   render() {
     return (
-      <div>
-        <ul>
-          <li>2222222</li>
-        </ul>
+      <div className="center">
+        <p className="p1">Ga-React-cli</p>
+        <p className="p2">欢迎使用</p>
       </div>
     );
   }
