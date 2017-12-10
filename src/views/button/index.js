@@ -4,7 +4,7 @@ class Button extends Component {
   render() {
     return (
       <div>
-        button
+        wangqi
       </div>
     );
   }
