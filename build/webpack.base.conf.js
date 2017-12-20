@@ -21,6 +21,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
+    reacts: ['react', 'react-dom', 'redux', 'react-redux', 'react-router-dom'],
     app: './src/main.js'
   },
   output: {
@@ -41,6 +42,13 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        // 匹配router下面所有文件
+        test: /\/([^/]+)\/?([^/]*)\.jsx?$/,
+        include: path.resolve(__dirname, 'src/router/'),
+        // loader: 'bundle-loader?lazy'
+        loaders: ['bundle-loader?lazy', 'babel-loader']
+      },
       {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',

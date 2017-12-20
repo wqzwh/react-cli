@@ -14,9 +14,9 @@ class Routers extends Component {
     return(
       <Router>
         <Switch>
-          <Route path="/" component={Demo} />
-          <Route path="/demo" component={Demo} />
-          <Route path="/button" component={Button} />
+          <Route exact path="/" render={() => <Demo/>} />
+          <Route path="/demo" render={() => <Demo/>} />
+          <Route path="/wq" render={ () => <Button/>} />
         </Switch>
       </Router>
     )
