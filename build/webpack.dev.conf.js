@@ -11,9 +11,11 @@ const portfinder = require('portfinder')
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
-Object.keys(baseWebpackConfig.entry).forEach(function (name) {
-  baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-})
+// Object.keys(baseWebpackConfig.entry).forEach(function (name) {
+//   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
+// })
+
+// baseWebpackConfig.output.chunkFilename = '[name].[chunkhash].js'
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
