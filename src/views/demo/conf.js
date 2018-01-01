@@ -1,7 +1,4 @@
 /**
- * Created by xueshuai on 2017/9/14.
- */
-/**
  *  系统级配置
  */
 import {mergeMock} from '../../public/utils/confUtils'
