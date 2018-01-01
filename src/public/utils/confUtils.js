@@ -1,6 +1,6 @@
 /**
  * [mergeMock 函数]
- * by xiaoxian
+ * by wangqi
  * @param  {[type]} pMock [页面开关]
  * @param  {[type]} mMock [模块开关]
  * @return {[merge 后对象]}

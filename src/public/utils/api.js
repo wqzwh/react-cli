@@ -16,10 +16,6 @@ function ajax(url, type, options) {
       })
       .then((result) => {
         if (result && result.status === 200) {
-          // if (!result.data.code) {
-          //   location.href = 'http://ssa.jd.com/sso/login?ReturnUrl=' + location.href;
-          //   resolve()
-          // }
           if (result.data.code === 200) {
             resolve(result.data.data);
           } else if (result.data.code === 403) {
@@ -47,9 +43,7 @@ function ajax(url, type, options) {
         }
       })
       .catch(function(error) {
-        // console.log(error, url);
         if (error.request.status === 0) {
-          // location.href = 'http://ssa.jd.com/sso/login?ReturnUrl=' + location.href;
         }
         resolve()
       });
