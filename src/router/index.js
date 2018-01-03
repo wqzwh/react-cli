@@ -6,17 +6,15 @@ import {
   Redirect
 } from 'react-router-dom'
 
-import Demo from '@/views/demo/index'
-import Button from '@/views/button/index'
+import Index from '@/views/index/index'
 
 class Routers extends Component {
   render() {
     return(
       <Router>
         <Switch>
-          <Route exact path="/" render={() => <Demo/>} />
-          <Route path="/demo" render={() => <Demo/>} />
-          <Route path="/wq" render={ () => <Button/>} />
+          <Route exact path="/" render={() => <Index/>} />
+          <Route path="/index" render={() => <Index/>} />
         </Switch>
       </Router>
     )

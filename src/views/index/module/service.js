@@ -1,5 +1,5 @@
 import Q from 'q';
-import CONF from '@/views/demo/conf';
+import CONF from '@/views/index/conf';
 import API from '@/public/utils/api';
 
 const M = CONF['module'];
