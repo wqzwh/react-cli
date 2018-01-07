@@ -22,6 +22,7 @@ class Header extends Component {
     this.state = {
       tabArray: []
     };
+    this.tabRender = this.tabRender.bind(this)
   }
 
   componentWillMount() {

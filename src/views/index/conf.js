@@ -17,6 +17,13 @@ const MODULECONF = {
     API: {
       GET: '/api/brand',
     }
+  },
+  floorOne: {
+    NAME: '',
+    MOCK: true,
+    API: {
+      GET: '/api/brand',
+    }
   }
 };
 
