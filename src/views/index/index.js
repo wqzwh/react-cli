@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as types from '../../store/action';
-import Module from './module/index';
+// import Module from './module/index';
 import Header from '@/components/header/index';
+import Banner from './module/banner/index';
 
 import '@/assets/views/index.less';
 
@@ -15,7 +16,8 @@ class App extends Component {
           <div className="m-hd">
             <Header/>
           </div>
-        </div> 
+        </div>
+        <Banner/>
         {/* <Module 
         onSetLoginClick={text =>
           dispatch(types.setLogin(text))

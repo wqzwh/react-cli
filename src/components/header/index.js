@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Service from './service';
 
 const Style = {
   innerStyle: {
@@ -12,11 +13,34 @@ const Style = {
     transitionDuration: '0ms',
     transform: 'translate(0px, 0px) translateZ(0px)'
   }
-  
 }
 
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabArray: []
+    };
+  }
+
+  componentWillMount() {
+    Service.get().then((data) => {
+      this.setState({
+        tabArray: data
+      })
+    })
+  }
+  
+  tabRender() {
+    return (
+      this.state.tabArray.map((item,index) => (
+        <div className={item.checked ? 'tab active' : 'tab'} key={index}>
+          <span className="txt">{item.value}</span>
+        </div>
+      ))
+    )
+  }
   render() {
     return (
       <div className="m-indexHd">
@@ -27,43 +51,11 @@ class Header extends Component {
             <span className="placeholder">搜索商品, 共10364款好物</span>
           </div>
         </div>
-        <div className="m-tabs   scroll">
+        <div className="m-tabs scroll">
           <header>
             <div className="inner" style={Style.innerStyle}>
               <div className="list" style={Style.listStyle}>
-                <div className="tab active">
-                  <span className="txt">推荐</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">居家</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">餐厨</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">配件</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">服装</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">电器</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">洗护</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">杂货</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">饮食</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">婴童</span>
-                </div>
-                <div className="tab">
-                  <span className="txt">志趣</span>
-                </div>
+              {this.tabRender()}
               </div>
             </div>
           </header>

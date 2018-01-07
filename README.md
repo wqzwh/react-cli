@@ -4,7 +4,7 @@
 
 > react project
 
-## Build Setup
+## 基本命令
 
 ``` bash
 # install dependencies
