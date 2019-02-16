@@ -1,33 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as types from '../../store/action';
-import Header from '@/components/header/index';
-import BottomNav from '@/components/bottomNav/index';
-import Banner from './module/banner/index';
-import FloorOne from './module/floorOne/index';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { Row, Col } from 'antd'
+import isEqual from 'lodash/isEqual'
 
-import '@/assets/views/index.less';
-
-class App extends Component {
+class Index extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+  componentWillReceiveProps(nextProps) {}
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state)
+  }
   render() {
-    const {dispatch} = this.props
     return (
-      <div id="j-bd">
-        <div className="g-row m-index">
-          <div className="m-hd">
-            <Header/>
-          </div>
-        </div>
-        <Banner/>
-        <FloorOne/>
-        <BottomNav/>
-        {/* <Module 
-        onSetLoginClick={text =>
-          dispatch(types.setLogin(text))
-        }/> */}
-      </div>
-    );
+      <Row>
+        <Col span={24}>欢迎</Col>
+      </Row>
+    )
   }
 }
 
-export default connect()(App);
+Index.propTypes = {
+  dispatch: PropTypes.func
+}
+export default connect(state => {
+  return {}
+})(Index)

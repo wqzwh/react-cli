@@ -1,21 +1,16 @@
 import React, { Component } from 'react'
-import {
-  Route,
-  Switch,
-  HashRouter as Router,
-  Redirect
-} from 'react-router-dom'
-
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import Container from '@/components/container/container'
 import Index from '@/views/index/index'
-
 class Routers extends Component {
   render() {
-    return(
+    return (
       <Router>
-        <Switch>
-          <Route exact path="/" render={() => <Index/>} />
-          <Route path="/index" render={() => <Index/>} />
-        </Switch>
+        <Container>
+          <Switch>
+            <Route exact path='/' render={() => <Index />} />
+          </Switch>
+        </Container>
       </Router>
     )
   }
