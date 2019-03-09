@@ -1,8 +1,10 @@
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
-    parser: 'babel-eslint',
     sourceType: 'module',
+    allowImportExportEverywhere: false,
+    codeFrame: false,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
       jsx: true,

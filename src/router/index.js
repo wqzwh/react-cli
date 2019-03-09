@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import Loadable from 'react-loadable'
 import Container from '@/components/container/container'
-import Index from '@/views/index/index'
+import LoadingComponent from '@/components/loading/index'
+
+const Index = Loadable({
+  loader: () => import('@/views/index/index'),
+  loading: LoadingComponent
+})
+
 class Routers extends Component {
   render() {
     return (

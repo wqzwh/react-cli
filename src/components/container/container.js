@@ -73,7 +73,7 @@ class Container extends Component {
                 mode='inline'
                 selectedKeys={this.state.selectedKeys}
                 defaultOpenKeys={['sub0', 'sub1']}
-                style={{ height: '100%', borderRight: 0 }}
+                style={{ height: '100vh', borderRight: 0 }}
                 onSelect={this.onSelect.bind(this)}
               >
                 {subMenuList}
