@@ -5,7 +5,7 @@
   "author": "wangqi",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --useLocalIp --progress --config build/webpack.dev.conf.js",
     "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build": "node build/build.js",
     "test": "node build/prod-server.js",
