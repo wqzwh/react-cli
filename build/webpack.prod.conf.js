@@ -21,7 +21,6 @@ const env =
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   entry: {
-    charts: ['echarts'],
     vendors: ['react', 'react-redux', 'react-router-dom', 'moment']
   },
   module: {
@@ -110,13 +109,6 @@ const webpackConfig = merge(baseWebpackConfig, {
           maxInitialRequests: 5, // The default limit is too small to showcase the effect
           minSize: 0, // This is example is too small to create commons chunks
           name: 'common'
-        },
-        charts: {
-          chunks: 'async',
-          minChunks: 2,
-          maxInitialRequests: 5, // The default limit is too small to showcase the effect
-          minSize: 0, // This is example is too small to create commons chunks
-          name: 'charts'
         },
         vendors: {
           chunks: 'async',
