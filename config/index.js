@@ -39,6 +39,7 @@ module.exports = {
     cssSourceMap: false,
     cacheBusting: true,
     showEslintErrorsInOverlay: false,
-    useEslint: true
+    useEslint: true,
+    devtool: 'inline-source-map'
   }
 }
