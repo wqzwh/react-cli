@@ -1,0 +1,80 @@
+@keyframes error404animation {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  20% {
+    transform: rotateZ(-60deg);
+  }
+
+  40% {
+    transform: rotateZ(-10deg);
+  }
+
+  60% {
+    transform: rotateZ(50deg);
+  }
+
+  80% {
+    transform: rotateZ(-20deg);
+  }
+
+  100% {
+    transform: rotateZ(0deg);
+  }
+}
+
+.row {
+  margin-top: 160px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 240px;
+  font-weight: 700;
+  color: #2d8cf0;
+  height: 260px;
+  line-height: 260px;
+  text-align: center;
+}
+
+.logo-icon {
+  border-radius: 50%;
+  width: 240px;
+  height: 240px;
+  border: 20px solid #2d8cf0;
+  display: inline-block;
+}
+
+.find-img {
+  width: 180px;
+  vertical-align: top;
+  margin-top: 20px;
+  animation: error404animation 3s ease 0s infinite alternate;
+}
+
+.err-message {
+  margin: 40px 0px;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.err-message a {
+  color: #2d8cf0;
+}
+
+.back-btn {
+  width: 130px;
+  height: 50px;
+  background: #2d8cf0;
+  border: 0px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}

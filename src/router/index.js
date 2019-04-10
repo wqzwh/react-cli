@@ -9,6 +9,11 @@ const Index = Loadable({
   loading: LoadingComponent
 })
 
+const NotFound = Loadable({
+  loader: () => import('@/views/not-found/index'),
+  loading: LoadingComponent
+})
+
 class Routers extends Component {
   render() {
     return (
@@ -16,6 +21,7 @@ class Routers extends Component {
         <Container>
           <Switch>
             <Route exact path='/' render={() => <Index />} />
+            <Route render={() => <NotFound />} />
           </Switch>
         </Container>
       </Router>
