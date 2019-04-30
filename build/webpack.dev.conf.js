@@ -21,10 +21,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         use: [
           require.resolve('style-loader'),
           {
-            loader: require.resolve('css-loader'),
-            options: {
-              importLoaders: 1
-            }
+            loader: require.resolve('css-loader')
           }
         ]
       },
@@ -36,7 +33,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           {
             loader: require.resolve('css-loader'),
             options: {
-              importLoaders: 1
+              importLoaders: 1 // 在执行css-loader的时候会默认先执行less-loader
             }
           },
           {
@@ -58,7 +55,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           {
             loader: require.resolve('css-loader'),
             options: {
-              modules: true,
+              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
               localIdentName: '[local]_[hash:base64:8]'
             }
           },
@@ -89,9 +86,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
+    overlay: config.dev.errorOverlay ? { warnings: false, errors: true } : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -137,15 +132,9 @@ module.exports = new Promise((resolve, reject) => {
       devWebpackConfig.plugins.push(
         new FriendlyErrorsPlugin({
           compilationSuccessInfo: {
-            messages: [
-              `Your application is running here: http://${
-                devWebpackConfig.devServer.host
-              }:${port}`
-            ]
+            messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`]
           },
-          onErrors: config.dev.notifyOnErrors
-            ? utils.createNotifierCallback()
-            : undefined
+          onErrors: config.dev.notifyOnErrors ? utils.createNotifierCallback() : undefined
         })
       )
       resolve(devWebpackConfig)
