@@ -9,7 +9,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HappyPack = require('happypack')
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
@@ -17,10 +21,53 @@ const env = process.env.NODE_ENV === 'testing' ? require('../config/test.env') :
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
-  entry: {
-    vendors: ['react', 'react-redux', 'react-router-dom', 'moment']
-  },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+      },
+      {
+        test: /\.less$/,
+        exclude: [/src/],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              modifyVars: {
+                'primary-color': '#213BD6'
+              },
+              javascriptEnabled: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.less$/,
+        exclude: [/node_modules/],
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
+              localIdentName: '[local]_[hash:base64:8]'
+            }
+          },
+          'less-loader',
+          'postcss-loader'
+        ]
+      }
+    ]
+  },
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
@@ -29,7 +76,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     // minimizer: true,
     providedExports: true,
-    usedExports: true,
+    usedExports: true, // 开启tree shaking
     // 识别package.json中的sideEffects以剔除无用的模块，用来做tree-shake
     // 依赖于optimization.providedExports和optimization.usedExports
     sideEffects: true,
@@ -38,37 +85,39 @@ const webpackConfig = merge(baseWebpackConfig, {
     // 取代 new webpack.NoEmitOnErrorsPlugin()，编译错误时不打印输出资源。
     noEmitOnErrors: true,
     splitChunks: {
-      // maxAsyncRequests: 1,                     // 最大异步请求数， 默认1
-      // maxInitialRequests: 1,                   // 最大初始化请求书，默认1
+      chunks: 'all',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1, // 判断库被引用多少次才进行打包分割
+      maxAsyncRequests: 5, // 最大异步请求数， 默认1，只会对前5个库文件代码分割打包
+      maxInitialRequests: 3, // 最大初始化请求数，默认1，对项目入口文件的前3个库文件进行代码分割
+      automaticNameDelimiter: '~', // 代码分割名称的分割符
+      name: true, // cacheGroups中的设置名称有效
       cacheGroups: {
-        // 抽离第三方插件
-        commons: {
-          // test: path.resolve(__dirname, '../node_modules'),
-          chunks: 'all',
-          minChunks: 2,
-          maxInitialRequests: 5, // The default limit is too small to showcase the effect
-          minSize: 0, // This is example is too small to create commons chunks
-          name: 'common'
-        },
         vendors: {
-          chunks: 'async',
-          minChunks: 2,
-          maxInitialRequests: 5, // The default limit is too small to showcase the effect
-          minSize: 0, // This is example is too small to create commons chunks
-          name: 'vendors'
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+          // filename: 'vendors.js'
+        },
+        default: {
+          priority: -20,
+          reuseExistingChunk: true // 如果一个模块已经被打包了，则忽略该模块打包
+          // filename: 'common.js'
         }
       }
     },
     // 提取webpack运行时的代码
     runtimeChunk: {
       name: 'manifest'
-    }
+    },
+    minimizer: [new OptimizeCssAssetsPlugin({})]
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new CleanWebpackPlugin(),
     new HappyPack({
       loaders: [
         {
@@ -80,6 +129,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         }
       ],
       threadPool: happyThreadPool
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
     }),
     new LodashModuleReplacementPlugin(),
     // 解决moment语言包问题
@@ -100,6 +153,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'prefetch'
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      as(entry) {
+        if (/\.css$/.test(entry)) return 'style'
+        if (/\.woff$/.test(entry)) return 'font'
+        if (/\.png$/.test(entry)) return 'image'
+        return 'script'
+      }
     }),
     new webpack.HashedModuleIdsPlugin(),
 
