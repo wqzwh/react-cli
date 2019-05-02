@@ -1,4 +1,3 @@
-'use strict'
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
@@ -15,10 +14,114 @@ const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
 const os = require('os')
+const fs = require('fs')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
 const env = process.env.NODE_ENV === 'testing' ? require('../config/test.env') : require('../config/prod.env')
+
+const plugins = [
+  // http://vuejs.github.io/vue-loader/en/workflow/production.html
+  new webpack.DefinePlugin({
+    'process.env': env
+  }),
+  new CleanWebpackPlugin(),
+  new HappyPack({
+    loaders: [
+      {
+        loader: 'babel-loader',
+        options: {
+          babelrc: true,
+          cacheDirectory: true
+        }
+      }
+    ],
+    threadPool: happyThreadPool
+  }),
+  new MiniCssExtractPlugin({
+    filename: '[name].css',
+    chunkFilename: '[id].css'
+  }),
+  // 配置PWA
+  new WorkboxPlugin.GenerateSW({
+    cacheId: 'webpack-pwa', // 设置前缀
+    skipWaiting: true, // 强制等待中的 Service Worker 被激活
+    clientsClaim: true, // Service Worker 被激活后使其立即获得页面控制权
+    swDest: 'service-worker.js', // 输出 Service worker 文件
+    globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
+    globIgnores: ['service-worker.js'], // 忽略的文件
+    runtimeCaching: [
+      // 配置路由请求缓存
+      {
+        urlPattern: /.*\.js/, // 匹配文件
+        handler: 'networkFirst' // 网络优先
+      }
+    ]
+  }),
+  new LodashModuleReplacementPlugin(),
+  // generate dist index.html with correct asset hash for caching.
+  // you can customize output by editing /index.html
+  // see https://github.com/ampedandwired/html-webpack-plugin
+  new HtmlWebpackPlugin({
+    filename: process.env.NODE_ENV === 'test' ? 'index.html' : config.build.index,
+    template: 'index.html',
+    inject: true,
+    minify: {
+      removeComments: true, // 移除HTML中的注释
+      collapseWhitespace: true, // 删除空白符与换行符
+      removeAttributeQuotes: true
+      // more options:
+      // https://github.com/kangax/html-minifier#options-quick-reference
+    },
+    // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+    chunksSortMode: 'dependency'
+  }),
+  new PreloadWebpackPlugin({
+    rel: 'prefetch'
+  }),
+  new PreloadWebpackPlugin({
+    rel: 'preload',
+    as(entry) {
+      if (/\.css$/.test(entry)) return 'style'
+      if (/\.woff$/.test(entry)) return 'font'
+      if (/\.png$/.test(entry)) return 'image'
+      return 'script'
+    }
+  }),
+  // keep module.id stable when vendor modules does not change
+  new webpack.HashedModuleIdsPlugin(),
+  // copy custom static assets
+  new CopyWebpackPlugin([
+    {
+      from: path.resolve(__dirname, '../static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }
+  ]),
+  new ScriptExtHtmlWebpackPlugin({
+    defaultAttribute: 'defer'
+  })
+]
+
+// 配置dll的映射
+const files = fs.readdirSync(path.resolve(__dirname, '../dll'))
+files.forEach(file => {
+  if (/.*\.dll.js/.test(file)) {
+    plugins.push(
+      new AddAssetHtmlWebpackPlugin({
+        filepath: path.resolve(__dirname, '../dll', file)
+      })
+    )
+  }
+  if (/.*\.manifest.json/.test(file)) {
+    plugins.push(
+      new webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, '../dll', file)
+      })
+    )
+  }
+})
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -113,93 +216,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     },
     minimizer: [new OptimizeCssAssetsPlugin({})]
   },
-  plugins: [
-    // http://vuejs.github.io/vue-loader/en/workflow/production.html
-    new webpack.DefinePlugin({
-      'process.env': env
-    }),
-    new CleanWebpackPlugin(),
-    new HappyPack({
-      loaders: [
-        {
-          loader: 'babel-loader',
-          options: {
-            babelrc: true,
-            cacheDirectory: true
-          }
-        }
-      ],
-      threadPool: happyThreadPool
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
-    }),
-    // 配置PWA
-    new WorkboxPlugin.GenerateSW({
-      cacheId: 'webpack-pwa', // 设置前缀
-      skipWaiting: true, // 强制等待中的 Service Worker 被激活
-      clientsClaim: true, // Service Worker 被激活后使其立即获得页面控制权
-      swDest: 'service-worker.js', // 输出 Service worker 文件
-      globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
-      globIgnores: ['service-worker.js'], // 忽略的文件
-      runtimeCaching: [
-        // 配置路由请求缓存
-        {
-          urlPattern: /.*\.js/, // 匹配文件
-          handler: 'networkFirst' // 网络优先
-        }
-      ]
-    }),
-    new LodashModuleReplacementPlugin(),
-    // 解决moment语言包问题
-    new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(zh-cn)$/),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing' ? 'index.html' : config.build.index,
-      template: 'index.html',
-      inject: true,
-      minify: {
-        removeComments: true, // 移除HTML中的注释
-        collapseWhitespace: true, // 删除空白符与换行符
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
-    new PreloadWebpackPlugin({
-      rel: 'prefetch'
-    }),
-    new PreloadWebpackPlugin({
-      rel: 'preload',
-      as(entry) {
-        if (/\.css$/.test(entry)) return 'style'
-        if (/\.woff$/.test(entry)) return 'font'
-        if (/\.png$/.test(entry)) return 'image'
-        return 'script'
-      }
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-
-    // keep module.id stable when vendor modules does not change
-    // new webpack.HashedModuleIdsPlugin(),
-
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
-    new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer'
-    })
-  ]
+  plugins
 })
 
 if (config.build.productionGzip) {

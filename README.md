@@ -12,7 +12,6 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
-npm run start
 
 # build for production with minification
 npm run build
@@ -25,6 +24,15 @@ npm run analyz
 
 # 自动化测试命令
 npm run test
+
+# build之后的本地测试
+npm run prod
+
+# 测试PWA
+npm run start
+
+# dll打包
+npm run dll
 ```
 
 ## 自动化测试说明
