@@ -14,6 +14,7 @@ const HappyPack = require('happypack')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
@@ -133,6 +134,22 @@ const webpackConfig = merge(baseWebpackConfig, {
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
+    }),
+    // 配置PWA
+    new WorkboxPlugin.GenerateSW({
+      cacheId: 'webpack-pwa', // 设置前缀
+      skipWaiting: true, // 强制等待中的 Service Worker 被激活
+      clientsClaim: true, // Service Worker 被激活后使其立即获得页面控制权
+      swDest: 'service-worker.js', // 输出 Service worker 文件
+      globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
+      globIgnores: ['service-worker.js'], // 忽略的文件
+      runtimeCaching: [
+        // 配置路由请求缓存
+        {
+          urlPattern: /.*\.js/, // 匹配文件
+          handler: 'networkFirst' // 网络优先
+        }
+      ]
     }),
     new LodashModuleReplacementPlugin(),
     // 解决moment语言包问题
