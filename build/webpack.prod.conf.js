@@ -20,60 +20,6 @@ const webpackConfig = merge(baseWebpackConfig, {
   entry: {
     vendors: ['react', 'react-redux', 'react-router-dom', 'moment']
   },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader')
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/src/],
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader'),
-            options: {
-              sourceMap: config.build.productionSourceMap,
-              importLoaders: 1 // 在执行css-loader的时候会默认先执行less-loader
-            }
-          },
-          {
-            loader: require.resolve('less-loader'),
-            options: {
-              sourceMap: config.build.productionSourceMap,
-              modifyVars: {
-                'primary-color': '#213BD6'
-              },
-              javascriptEnabled: true // less-loader 3.x以上的版本需要添加这个
-            } // compiles Less to CSS
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/node_modules/],
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader'),
-            options: {
-              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
-              localIdentName: '[local]_[hash:base64:8]'
-            }
-          },
-          {
-            loader: require.resolve('less-loader')
-          }
-        ]
-      }
-    ]
-  },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,

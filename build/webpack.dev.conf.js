@@ -14,58 +14,6 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader')
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/src/],
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader'),
-            options: {
-              importLoaders: 1 // 在执行css-loader的时候会默认先执行less-loader
-            }
-          },
-          {
-            loader: require.resolve('less-loader'),
-            options: {
-              modifyVars: {
-                'primary-color': '#213BD6'
-              },
-              javascriptEnabled: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/node_modules/],
-        use: [
-          require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader'),
-            options: {
-              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
-              localIdentName: '[local]_[hash:base64:8]'
-            }
-          },
-          {
-            loader: require.resolve('less-loader')
-          }
-        ]
-      }
-    ]
-  },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
