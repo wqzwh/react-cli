@@ -11,8 +11,8 @@
     "*.gif"
   ],
   "scripts": {
-    "dev": "webpack-dev-server --inline --useLocalIp --progress --config build/webpack.dev.conf.js",
-    "build": "node build/build.js",
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --inline --useLocalIp --progress --config build/webpack.dev.conf.js",
+    "build": "cross-env NODE_ENV=production node build/build.js",
     "lint": "eslint --ext .js src",
     "analyz": "NODE_ENV=production npm_config_report=true npm run build",
     "test": "cross-env BABEL_ENV=test jest --colors --collectCoverage",

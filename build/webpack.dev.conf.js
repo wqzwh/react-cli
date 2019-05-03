@@ -16,52 +16,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.less$/,
-        exclude: [/src/],
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1
-            }
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              modifyVars: {
-                'primary-color': '#213BD6'
-              },
-              javascriptEnabled: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/node_modules/],
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
-              localIdentName: '[local]_[hash:base64:8]'
-            }
-          },
-          'less-loader',
-          'postcss-loader'
-        ]
-      }
-    ]
-  },
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',

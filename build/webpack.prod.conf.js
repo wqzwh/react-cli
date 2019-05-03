@@ -11,10 +11,10 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HappyPack = require('happypack')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const os = require('os')
 const fs = require('fs')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
@@ -124,52 +124,6 @@ files.forEach(file => {
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.less$/,
-        exclude: [/src/],
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1
-            }
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              modifyVars: {
-                'primary-color': '#213BD6'
-              },
-              javascriptEnabled: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.less$/,
-        exclude: [/node_modules/],
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true, // 开启模块化打包，避免样式全局影响 例：import styles form 'index.less'
-              localIdentName: '[local]_[hash:base64:8]'
-            }
-          },
-          'less-loader',
-          'postcss-loader'
-        ]
-      }
-    ]
-  },
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
