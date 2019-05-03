@@ -4,12 +4,6 @@
   "description": "react project",
   "author": "wangqi",
   "private": true,
-  "sideEffects": [
-    "*.css",
-    "*.jpg",
-    "*.png",
-    "*.gif"
-  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --inline --useLocalIp --progress --config build/webpack.dev.conf.js",
     "build": "cross-env NODE_ENV=production node build/build.js",

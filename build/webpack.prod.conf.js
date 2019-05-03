@@ -130,7 +130,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   optimization: {
-    // minimizer: true,
     providedExports: true,
     usedExports: true, // 开启tree shaking
     // 识别package.json中的sideEffects以剔除无用的模块，用来做tree-shake

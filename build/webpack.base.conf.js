@@ -106,8 +106,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  optimization: {
-    usedExports: true // 开启tree shaking
   }
 }
