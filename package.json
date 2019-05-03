@@ -13,7 +13,6 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --useLocalIp --progress --config build/webpack.dev.conf.js",
     "build": "node build/build.js",
-    "prod": "node build/prod-server.js",
     "lint": "eslint --ext .js src",
     "analyz": "NODE_ENV=production npm_config_report=true npm run build",
     "test": "cross-env BABEL_ENV=test jest --colors --collectCoverage",

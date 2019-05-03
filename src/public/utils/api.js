@@ -57,7 +57,7 @@ const configData = (type, params) => {
 }
 
 function isMock(mock) {
-  if (process.env.STATS === 'dist') return false
+  if (process.env.NODE_ENV === 'dist') return false
   if (mock) return true
   return false
 }

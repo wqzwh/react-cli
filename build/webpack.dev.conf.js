@@ -74,18 +74,18 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       ]
     },
     hot: true, // 开启hmr功能
-    hotOnly: true, // 即便hmr功能没生效，防止浏览器自动刷新
-    contentBase: false, // since we use CopyWebpackPlugin.
-    compress: true,
+    // hotOnly: true, // 即便hmr功能没生效，防止浏览器自动刷新
+    contentBase: false, // 对外提供的访问内容的路径
+    compress: true, // 是否启用gzip压缩
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay ? { warnings: false, errors: true } : false,
+    overlay: config.dev.errorOverlay ? { warnings: false, errors: true } : false, // 在浏览器上全屏显示编译的errors或warnings
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
+    quiet: true, // 当启用该配置，除了初始化信息会被写到console中，其他任何信息都不会被写进去。errors和warnings也不会被写到console中。
     watchOptions: {
-      poll: config.dev.poll
+      poll: config.dev.poll // webpack基于文件系统来获取文件的改变。在某些场景下，是不起作用的。比如，当使用NFS或Vagrant。针对这种情况使用polling进行监控。
     }
   },
   plugins: [

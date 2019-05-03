@@ -19,12 +19,10 @@ const os = require('os')
 const fs = require('fs')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
-const env = process.env.NODE_ENV === 'testing' ? require('../config/test.env') : require('../config/prod.env')
-
 const plugins = [
   // http://vuejs.github.io/vue-loader/en/workflow/production.html
   new webpack.DefinePlugin({
-    'process.env': env
+    'process.env': require('../config/prod.env')
   }),
   new CleanWebpackPlugin(),
   new HappyPack({
