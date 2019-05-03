@@ -38,8 +38,6 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false,
-    cacheBusting: true,
     showEslintErrorsInOverlay: false,
     useEslint: true,
     // source-map内容会打包到js文件中，如果使用source-map则会新生成一个map文件
