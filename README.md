@@ -25,10 +25,7 @@ npm run analyz
 # 自动化测试命令
 npm run test
 
-# build之后的本地测试
-npm run prod
-
-# 测试PWA
+# 测试PWA/build之后的本地测试
 npm run start
 
 # dll打包
