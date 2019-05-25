@@ -7,11 +7,11 @@ const transformIgnorePatterns = [
 
 module.exports = {
   rootDir: path.resolve(__dirname, './'),
-  testEnvironment: 'jsdom',
+  coveragePathIgnorePatterns: ['/node_modules/', '/tests/setup.js'], // 忽略统计覆盖率的文件
   transform: {
     '^.+\\.(js|jsx|ts)$': 'babel-jest'
   },
-  setupFiles: ['<rootDir>/test/setup.js'],
+  setupFiles: ['<rootDir>/test/setup.js', 'jest-canvas-mock'],
   // setupTestFrameworkScriptFile: path.resolve(__dirname, './test', 'jest.setup.js'),
   testURL: 'http://localhost/',
   testEnvironment: 'jsdom', // 测试环境
@@ -19,10 +19,9 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/spec/__mocks__/fileMock.js',
-    '\\.(css|scss)$': '<rootDir>/spec/__mocks__/styleMock.js',
-    '^component_path$': '<rootDir>/src/components',
-    '^root_path$': '<rootDir>/src'
+      '<rootDir>/test/__mocks__/fileMock.js',
+    '\\.(s?css|less)$': 'identity-obj-proxy',
+    '@/(.*)$': '<rootDir>/src/$1'
   },
   transformIgnorePatterns
 }
