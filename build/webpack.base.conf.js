@@ -71,7 +71,7 @@ module.exports = {
         test: /\.less$/,
         exclude: [/src/],
         use: [
-          'style-loader',
+          env === 'dev' ? 'style-loader' : MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
