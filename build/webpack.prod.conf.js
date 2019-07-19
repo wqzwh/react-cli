@@ -39,7 +39,7 @@ const plugins = [
   }),
   new MiniCssExtractPlugin({
     filename: '[name].css',
-    chunkFilename: '[id].css'
+    chunkFilename: '[name].[chunkhash].css'
   }),
   // 配置PWA
   new WorkboxPlugin.GenerateSW({
@@ -179,18 +179,20 @@ if (config.build.productionGzip) {
 
 if (config.build.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-  webpackConfig.plugins.push(new BundleAnalyzerPlugin({
-    analyzerMode: 'server',
-    analyzerHost: '127.0.0.1',
-    analyzerPort: 8889,
-    reportFilename: 'report.html',
-    defaultSizes: 'parsed',
-    openAnalyzer: true,
-    generateStatsFile: false,
-    statsFilename: 'stats.json',
-    statsOptions: null,
-    logLevel: 'info'
-  }))
+  webpackConfig.plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'server',
+      analyzerHost: '127.0.0.1',
+      analyzerPort: 8889,
+      reportFilename: 'report.html',
+      defaultSizes: 'parsed',
+      openAnalyzer: true,
+      generateStatsFile: false,
+      statsFilename: 'stats.json',
+      statsOptions: null,
+      logLevel: 'info'
+    })
+  )
 }
 
 module.exports = webpackConfig
