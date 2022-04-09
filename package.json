@@ -19,7 +19,7 @@
   "dependencies": {
     "antd": "^3.12.3",
     "jsonp": "^0.2.1",
-    "moment": "^2.20.1",
+    "moment": "^2.29.2",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
